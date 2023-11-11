@@ -1,6 +1,8 @@
-# Project Name
+# MoneyPro(개발 중)
 
-간단한 소개 및 개요 1~2줄(메인 페이지 이미지 1장)
+본 서비스(머니프로)는 사용자들이 자신의 지출을 관리하고 원하는 목표 저축액 달성을 돕기위한 어플리케이션입니다.
+
+원하는 저축액 달성을 위해 개인의 소비지출을 추적하는 데 도움을 주고 절약 목표 달성을 위한 motivation을 제공합니다.
 
 - 배포링크 :
 
@@ -92,8 +94,7 @@
 
 ## 문제 해결
 
-- [Custom Validator](https://zamoca42.github.io/blog/js-ts/nest-js/custom-validator.html)
-- [맛집 목록 가져와서 지도에 표시하기](https://zamoca42.github.io/blog/js-ts/nest-js/query-range.html)
+- 
 
 <br/>
 
