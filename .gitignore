@@ -36,6 +36,7 @@ lerna-debug.log*
 
 # nodeenv
 env**
+.env
 
 # docker mysql
 docker-database/mysql/conf.d/**/*
