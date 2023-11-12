@@ -18,16 +18,27 @@ import { AccessTokenDto } from './dto/access-token.dto';
 import authConfig from '../config/auth.config';
 import { ConfigType } from '@nestjs/config';
 import { UserPasswordRepository } from './repository/user-password.repository';
+import { UserRepository } from './repository/user.repository';
+
+/**
+ * jwt는 userId를 sub의 value로 생성합니다.
+ * @prop {Number} sub - user id
+ * @author 명석
+ */
+export interface JwtPayload {
+  sub: string;
+}
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly dataSource: DataSource,
+    private readonly userRepository: UserRepository,
+    private readonly userPasswordRepository: UserPasswordRepository,
     private readonly jwtService: JwtService,
     private readonly logger: CustomLogger,
     @Inject(authConfig.KEY)
     private readonly jwtConfig: ConfigType<typeof authConfig>,
-    private readonly userPasswordRepository: UserPasswordRepository,
   ) {}
 
   async signUp(dto: SignUpDto): Promise<AccessTokenDto> {
@@ -74,6 +85,20 @@ export class UserService {
     );
 
     return new AccessTokenDto(accessToken);
+  }
+
+  async getTokenPayload(accessToken: string): Promise<JwtPayload> {
+    const payload = await this.jwtService.verifyAsync<JwtPayload>(accessToken, {
+      secret: process.env.JWT_SECRET,
+    });
+
+    const isExistUser = await this.userRepository.isExist(
+      User.byId(payload.sub),
+    );
+
+    if (!isExistUser) throw new Error('존재하지 않는 유저입니다.');
+
+    return payload;
   }
 
   async saveUser(dto: SignUpDto): Promise<User> {

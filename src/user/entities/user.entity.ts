@@ -19,6 +19,14 @@ export class User extends EntityBase {
   static byEmail(email: string): User {
     const user = new User();
     user.email = email;
+
+    return user;
+  }
+
+  static byId(id: string): User {
+    const user = new User();
+    user.id = id;
+
     return user;
   }
 }
