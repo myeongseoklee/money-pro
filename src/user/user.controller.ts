@@ -4,7 +4,9 @@ import { UserService } from './user.service';
 import { SignUpDto } from './dto/sign-up.dto';
 import { AccessTokenDto } from './dto/access-token.dto';
 import { SignInDto } from './dto/sign-in.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('인증/사용자')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}

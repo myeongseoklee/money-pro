@@ -9,4 +9,8 @@ export class UserRepository {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
+
+  async isExist(user: User): Promise<boolean> {
+    return await this.userRepository.exist({ where: { id: user.id } });
+  }
 }

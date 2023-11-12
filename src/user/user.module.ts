@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { UserRepository } from './repository/user.repository';
 import { UserProfileRepository } from './repository/user-profile.repository';
 import { UserPasswordRepository } from './repository/user-password.repository';
+import { AuthGuard } from './guard/auth.guard';
 
 console.log('process.env.JWT_SECRET: ', process.env);
 
@@ -27,6 +28,8 @@ console.log('process.env.JWT_SECRET: ', process.env);
     UserRepository,
     UserProfileRepository,
     UserPasswordRepository,
+    AuthGuard,
   ],
+  exports: [UserService, AuthGuard],
 })
 export class UserModule {}

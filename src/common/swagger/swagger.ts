@@ -28,10 +28,11 @@ export class SwaggerSetup {
     };
 
     const swaggerConfig = new DocumentBuilder()
-      .setTitle('title')
-      .setDescription(`description`)
+      .setTitle('MoneyPro')
+      .setDescription(
+        `머니프로는 사용자들이 자신의 지출을 관리하고 원하는 목표 저축액 달성을 돕기위한 어플리케이션입니다. 원하는 저축액 달성을 위해 개인의 소비지출을 추적하는 데 도움을 주고 절약 목표 달성을 위한 motivation을 제공합니다.`,
+      )
       .setVersion('1.0.0')
-      .addTag('api tag')
       //JWT 토큰 설정
       .addBearerAuth(
         {
