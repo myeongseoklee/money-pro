@@ -11,7 +11,7 @@ services: # 컨테이너 세부 정의
       - ./docker-database/mysql/conf.d:/etc/mysql/conf.d
       - ./docker-database/mysql/data:/var/lib/mysql
       - ./docker-database/mysql/my.cnf:/etc/mysql/my.cnf # mysql 설정 파일
-    env_file: ./src/config/.env # db에 주입해줄 env 파일경로. 경로로 입력하지 않으려면 environment에 직접 넣어준다.
+    env_file: ./src/config/env/.local.env # db에 주입해줄 env 파일경로. 경로로 입력하지 않으려면 environment에 직접 넣어준다.
     environment:
       TZ: Asia/Seoul
     networks:

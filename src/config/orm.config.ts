@@ -3,11 +3,11 @@ import { DatabaseType } from 'typeorm';
 
 export default registerAs('orm', () => ({
   type: 'mysql' as DatabaseType,
-  port: +process.env.DB_PORT,
-  username: process.env.DB_USERNAME,
-  host: process.env.DB_HOST,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
+  port: +process.env.MYSQL_PORT,
+  username: process.env.MYSQL_USERNAME,
+  host: process.env.MYSQL_HOST,
+  password: process.env.MYSQL_ROOT_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
   synchronize: process.env.NODE_ENV === 'production' ? false : true,
   autoLoadEntities: process.env.NODE_ENV === 'production' ? false : true,
   logging: process.env.NODE_ENV === 'production' ? false : true,

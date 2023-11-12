@@ -1,21 +1,18 @@
+import { CustomValidator } from './custom.validator';
 import { ValueTransformer } from 'typeorm';
-
-function isNullOrUndefined<T>(obj: T | null | undefined): boolean {
-  return typeof obj === 'undefined' || obj === null;
-}
 
 export class BooleanTransformer implements ValueTransformer {
   from(dbValue?: number | null): boolean | undefined {
-    if (isNullOrUndefined(dbValue)) {
+    if (CustomValidator.isNullOrUndefined(dbValue)) {
       return;
     }
     return dbValue ? true : false;
   }
 
-  to(value?: boolean | null): number | undefined {
-    if (isNullOrUndefined(value)) {
+  to(entityValue?: boolean | null): number | undefined {
+    if (CustomValidator.isNullOrUndefined(entityValue)) {
       return;
     }
-    return value ? 1 : 0;
+    return entityValue ? 1 : 0;
   }
 }
