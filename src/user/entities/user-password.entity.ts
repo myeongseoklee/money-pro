@@ -34,4 +34,8 @@ export class UserPassword extends EntityBase {
     userPassword.password = password;
     return userPassword;
   }
+
+  setHashedPassword(hashedPassword: string): void {
+    this.password = hashedPassword;
+  }
 }

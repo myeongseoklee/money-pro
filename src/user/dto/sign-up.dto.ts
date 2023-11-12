@@ -1,3 +1,4 @@
+import { DateTimeUtil } from './../../util/date-time.utils';
 import { Gender } from '../../common/types/gender.type';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
@@ -11,6 +12,10 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { User } from '../entities/user.entity';
+import { UserPassword } from '../entities/user-password.entity';
+import { UserProfile } from '../entities/user-profile.entity';
+import { SignUpProps } from '../user.service';
 
 export class SignUpDto {
   @Expose()
@@ -85,8 +90,21 @@ export class SignUpDto {
   })
   @Expose()
   @IsNotEmpty()
-  // @IsISO8601({ strict: true })
   @IsDate()
   @Type(() => Date)
   dateOfBirth: Date;
+
+  toEntity(): SignUpProps {
+    const user = User.create(this.email);
+    const userPassword = UserPassword.create(user, this.password);
+    const userProfile = UserProfile.create(
+      user,
+      this.name,
+      this.gender,
+      DateTimeUtil.getYear(this.dateOfBirth),
+      DateTimeUtil.getMonth(this.dateOfBirth),
+      DateTimeUtil.getDate(this.dateOfBirth),
+    );
+    return { user, userPassword, userProfile };
+  }
 }

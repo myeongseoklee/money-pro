@@ -17,7 +17,7 @@ export class UserController {
   ): Promise<ResponseEntity<AccessTokenDto>> {
     return ResponseEntity.CREATED_WITH(
       '회원가입 요청에 성공하였습니다.',
-      await this.userService.signUp(dto),
+      await this.userService.signUp(dto.toEntity()),
     );
   }
 
@@ -27,7 +27,7 @@ export class UserController {
   ): Promise<ResponseEntity<AccessTokenDto>> {
     return ResponseEntity.CREATED_WITH(
       '로그인 요청에 성공하였습니다.',
-      await this.userService.signIn(dto.toUserPasswordEntity()),
+      await this.userService.signIn(dto.toEntity()),
     );
   }
 }

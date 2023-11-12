@@ -1,5 +1,4 @@
 import { CustomLogger } from './../common/logger/custom.logger';
-import { DateTimeUtil } from './../util/date-time.utils';
 import {
   BadRequestException,
   ConflictException,
@@ -7,7 +6,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { SignUpDto } from './dto/sign-up.dto';
 import { DataSource } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UserPassword } from './entities/user-password.entity';
@@ -29,6 +27,12 @@ export interface JwtPayload {
   sub: string;
 }
 
+export interface SignUpProps {
+  user: User;
+  userPassword: UserPassword;
+  userProfile: UserProfile;
+}
+
 @Injectable()
 export class UserService {
   constructor(
@@ -41,8 +45,12 @@ export class UserService {
     private readonly jwtConfig: ConfigType<typeof authConfig>,
   ) {}
 
-  async signUp(dto: SignUpDto): Promise<AccessTokenDto> {
-    const user = await this.saveUser(dto);
+  async signUp({
+    user,
+    userPassword,
+    userProfile,
+  }: SignUpProps): Promise<AccessTokenDto> {
+    await this.saveUser(user, userPassword, userProfile);
 
     const accessToken = await this.jwtService.signAsync(
       { sub: user.id },
@@ -101,10 +109,11 @@ export class UserService {
     return payload;
   }
 
-  async saveUser(dto: SignUpDto): Promise<User> {
-    // 유저 엔티티 생성
-    const userEntity = User.create(dto.email);
-
+  async saveUser(
+    user: User,
+    userPassword: UserPassword,
+    userProfile: UserProfile,
+  ): Promise<void> {
     // 트랜잭션 생성
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -112,30 +121,16 @@ export class UserService {
 
     try {
       // 유저 엔티티 저장
-      await queryRunner.manager.insert(User, userEntity);
+      await queryRunner.manager.insert(User, user);
 
-      // 유저 패스워드 암호화 후 엔티티 생성
-      const hashedPassword = await hash(dto.password, 10);
-      const passwordEntity = UserPassword.create(userEntity, hashedPassword);
+      // 유저 패스워드 암호화 후 패스워드 엔티티 수정
+      userPassword.setHashedPassword(await hash(userPassword.password, 10));
 
-      // 프로필 엔티티 생성
-      const userProfileEntity = UserProfile.create(
-        userEntity,
-        dto.name,
-        dto.gender,
-        DateTimeUtil.getYear(dto.dateOfBirth),
-        DateTimeUtil.getMonth(dto.dateOfBirth),
-        DateTimeUtil.getDate(dto.dateOfBirth),
-      );
-
-      // 유저 패스워드 & 프로필 저장
-      await queryRunner.manager.insert(UserPassword, passwordEntity);
-      await queryRunner.manager.insert(UserProfile, userProfileEntity);
+      // 유저 패스워드 & 프로필 엔티티 저장
+      await queryRunner.manager.insert(UserPassword, userPassword);
+      await queryRunner.manager.insert(UserProfile, userProfile);
 
       await queryRunner.commitTransaction();
-
-      // 생성된 유저 리턴
-      return userEntity;
     } catch (error) {
       await queryRunner.rollbackTransaction();
 
