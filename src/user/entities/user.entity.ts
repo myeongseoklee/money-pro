@@ -15,4 +15,10 @@ export class User extends EntityBase {
 
     return user;
   }
+
+  static byEmail(email: string): User {
+    const user = new User();
+    user.email = email;
+    return user;
+  }
 }

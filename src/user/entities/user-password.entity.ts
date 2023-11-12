@@ -27,4 +27,11 @@ export class UserPassword extends EntityBase {
 
     return userPassword;
   }
+
+  static of(user: User, password: string): UserPassword {
+    const userPassword = new UserPassword();
+    userPassword.user = user;
+    userPassword.password = password;
+    return userPassword;
+  }
 }
