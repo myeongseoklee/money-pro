@@ -1,6 +1,5 @@
 import { DateOfMonth, Month } from './../common/types/date.type';
 import * as dayjs from 'dayjs';
-let i = 0;
 
 export class DateTimeUtil {
   static getNowFullISOString(): string {

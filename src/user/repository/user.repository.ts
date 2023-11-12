@@ -7,10 +7,10 @@ import { Injectable } from '@nestjs/common';
 export class UserRepository {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly repository: Repository<User>,
   ) {}
 
   async isExist(user: User): Promise<boolean> {
-    return await this.userRepository.exist({ where: { id: user.id } });
+    return await this.repository.exist({ where: { id: user.id } });
   }
 }
