@@ -7,6 +7,6 @@ import { Injectable } from '@nestjs/common';
 export class UserProfileRepository {
   constructor(
     @InjectRepository(UserProfile)
-    private readonly userProfileRepository: Repository<UserProfile>,
+    private readonly repository: Repository<UserProfile>,
   ) {}
 }

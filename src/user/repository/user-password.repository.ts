@@ -7,11 +7,11 @@ import { Injectable } from '@nestjs/common';
 export class UserPasswordRepository {
   constructor(
     @InjectRepository(UserPassword)
-    private readonly userPasswordRepository: Repository<UserPassword>,
+    private readonly repository: Repository<UserPassword>,
   ) {}
 
   async findUserBy(userPassword: UserPassword): Promise<UserPassword> {
-    return await this.userPasswordRepository.findOne({
+    return await this.repository.findOne({
       where: { user: { email: userPassword.user.email } },
       relations: { user: true },
     });

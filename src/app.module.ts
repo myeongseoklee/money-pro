@@ -9,6 +9,7 @@ import appConfig from './config/app.config';
 import ormConfig from './config/orm.config';
 import { APP_FILTER } from '@nestjs/core';
 import { UserModule } from './user/user.module';
+import { ExpenditureCategoryModule } from './expenditure-category/expenditure-category.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UserModule } from './user/user.module';
     }),
     CustomLoggerModule,
     UserModule,
+    ExpenditureCategoryModule,
   ],
   providers: [
     {
