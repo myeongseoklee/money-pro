@@ -4,7 +4,7 @@ import { User } from '../entities/user.entity';
 import { UserPassword } from '../entities/user-password.entity';
 
 export class SignInDto extends PickType(SignUpDto, ['email', 'password']) {
-  toUserPasswordEntity(): UserPassword {
+  toEntity(): UserPassword {
     return UserPassword.of(User.byEmail(this.email), this.password);
   }
 }
