@@ -4,15 +4,14 @@ import { HttpExceptionFilter } from './util/http-exception.filter';
 import {
   BadRequestException,
   ClassSerializerInterceptor,
-  Logger,
   ValidationPipe,
 } from '@nestjs/common';
 import * as basicAuth from 'express-basic-auth';
 import { CustomLogger } from './common/logger/custom.logger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationError } from 'class-validator';
-import morgan from 'morgan';
-import appConfig from './config/appConfig';
+import * as morgan from 'morgan';
+import appConfig from './config/app.config';
 import { ConfigType } from '@nestjs/config';
 import { SwaggerSetup } from './common/swagger/swagger';
 
@@ -23,7 +22,7 @@ async function bootstrap(): Promise<void> {
   const logger = app.get(CustomLogger);
 
   app.useLogger(logger);
-  app.use(morgan('combined'));
+  app.use(morgan('dev'));
 
   app
     .useGlobalPipes(

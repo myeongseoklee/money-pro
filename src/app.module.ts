@@ -4,10 +4,11 @@ import { CustomLoggerModule } from './common/logger/custom-logger.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigType } from '@nestjs/config';
-import authConfig from './config/authConfig';
-import appConfig from './config/appConfig';
-import ormConfig from './config/ormConfig';
+import authConfig from './config/auth.config';
+import appConfig from './config/app.config';
+import ormConfig from './config/orm.config';
 import { APP_FILTER } from '@nestjs/core';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { APP_FILTER } from '@nestjs/core';
       inject: [ormConfig.KEY],
     }),
     CustomLoggerModule,
+    UserModule,
   ],
   providers: [
     {

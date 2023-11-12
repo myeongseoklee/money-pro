@@ -6,6 +6,6 @@ import { registerAs } from '@nestjs/config';
  * @param jwtExpiresIn jwt 엑세스 토큰의 만료 기간(수명)입니다
  */
 export default registerAs('auth', () => ({
-  jwtSecret: process.env.JWT_SECRET_KEY,
+  jwtSecret: process.env.JWT_SECRET,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN,
 }));
