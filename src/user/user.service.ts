@@ -5,17 +5,19 @@ import {
   ConflictException,
   Inject,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { SignUpDto } from './dto/sign-up.dto';
 import { DataSource } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UserPassword } from './entities/user-password.entity';
 import { UserProfile } from './entities/user-profile.entity';
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AccessTokenDto } from './dto/access-token.dto';
 import authConfig from '../config/auth.config';
 import { ConfigType } from '@nestjs/config';
+import { UserPasswordRepository } from './repository/user-password.repository';
 
 @Injectable()
 export class UserService {
@@ -25,6 +27,7 @@ export class UserService {
     private readonly logger: CustomLogger,
     @Inject(authConfig.KEY)
     private readonly jwtConfig: ConfigType<typeof authConfig>,
+    private readonly userPasswordRepository: UserPasswordRepository,
   ) {}
 
   async signUp(dto: SignUpDto): Promise<AccessTokenDto> {
@@ -32,6 +35,38 @@ export class UserService {
 
     const accessToken = await this.jwtService.signAsync(
       { sub: user.id },
+      {
+        secret: this.jwtConfig.jwtSecret,
+        expiresIn: this.jwtConfig.jwtExpiresIn,
+      },
+    );
+
+    return new AccessTokenDto(accessToken);
+  }
+
+  async signIn(userPassword: UserPassword): Promise<AccessTokenDto> {
+    const savedUserPassword =
+      await this.userPasswordRepository.findUserBy(userPassword);
+
+    if (savedUserPassword === null) {
+      throw new UnauthorizedException(
+        '로그인에 실패했습니다. 이메일과 비밀번호를 다시 입력해주세요.',
+      );
+    }
+
+    const isSamePassword: boolean = await compare(
+      userPassword.password,
+      savedUserPassword.password,
+    );
+
+    if (!isSamePassword) {
+      throw new UnauthorizedException(
+        '로그인에 실패했습니다. 이메일과 비밀번호를 다시 입력해주세요.',
+      );
+    }
+
+    const accessToken = await this.jwtService.signAsync(
+      { sub: savedUserPassword.user.id },
       {
         secret: this.jwtConfig.jwtSecret,
         expiresIn: this.jwtConfig.jwtExpiresIn,

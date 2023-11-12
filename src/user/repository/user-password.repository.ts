@@ -10,7 +10,10 @@ export class UserPasswordRepository {
     private readonly userPasswordRepository: Repository<UserPassword>,
   ) {}
 
-  async insert(password: UserPassword): Promise<void> {
-    await this.userPasswordRepository.insert(password);
+  async findUserBy(userPassword: UserPassword): Promise<UserPassword> {
+    return await this.userPasswordRepository.findOne({
+      where: { user: { email: userPassword.user.email } },
+      relations: { user: true },
+    });
   }
 }

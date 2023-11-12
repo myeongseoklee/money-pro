@@ -9,7 +9,4 @@ export class UserProfileRepository {
     @InjectRepository(UserProfile)
     private readonly userProfileRepository: Repository<UserProfile>,
   ) {}
-  async insert(userProfile: UserProfile): Promise<void> {
-    await this.userProfileRepository.insert(userProfile);
-  }
 }
