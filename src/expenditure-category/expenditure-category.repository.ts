@@ -9,8 +9,6 @@ export class ExpenditureCategoryRepository {
   ) {}
 
   async findAll(): Promise<ExpenditureCategory[]> {
-    return await this.repository.find({
-      loadRelationIds: true,
-    });
+    return await this.repository.find();
   }
 }

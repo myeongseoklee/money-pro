@@ -6,7 +6,7 @@ import { Column, Entity, Unique } from 'typeorm';
 @Unique(['email'])
 export class User extends EntityBase {
   @Column({ name: 'email', type: 'varchar', nullable: false, length: 60 })
-  email!: string;
+  email: string;
 
   static create(email: string): User {
     const user = new User();

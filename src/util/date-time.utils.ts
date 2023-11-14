@@ -19,7 +19,7 @@ export class DateTimeUtil {
   }
 
   static getMonth(date: Date): Month {
-    return dayjs(date).month();
+    return dayjs(date).month() + 1;
   }
 
   static getDate(date: Date): DateOfMonth {

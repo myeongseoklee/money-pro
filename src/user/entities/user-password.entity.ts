@@ -5,9 +5,13 @@ import { User } from './user.entity';
 
 @Entity('user_passwords')
 export class UserPassword extends EntityBase {
+  @Column({ name: 'user_id', type: 'uuid', nullable: false })
+  userId: string;
+
   @OneToOne(() => User, (user) => user.id, {
     cascade: ['soft-remove', 'remove'],
     onDelete: 'CASCADE',
+    nullable: false,
   })
   @JoinColumn({
     name: 'user_id',
@@ -17,7 +21,7 @@ export class UserPassword extends EntityBase {
   user: User;
 
   @Column({ name: 'password', type: 'varchar', nullable: false, length: 60 })
-  password!: string;
+  password: string;
 
   static create(user: User, password: string): UserPassword {
     const userPassword = new UserPassword();

@@ -10,6 +10,7 @@ import ormConfig from './config/orm.config';
 import { APP_FILTER } from '@nestjs/core';
 import { UserModule } from './user/user.module';
 import { ExpenditureCategoryModule } from './expenditure-category/expenditure-category.module';
+import { BudgetModule } from './budget/budget.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ExpenditureCategoryModule } from './expenditure-category/expenditure-ca
     CustomLoggerModule,
     UserModule,
     ExpenditureCategoryModule,
+    BudgetModule,
   ],
   providers: [
     {

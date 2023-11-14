@@ -1,6 +1,6 @@
+import { ServiceBase } from './../base/service.base';
 import { CustomLogger } from './../common/logger/custom.logger';
 import {
-  BadRequestException,
   ConflictException,
   Inject,
   Injectable,
@@ -34,7 +34,7 @@ export interface SignUpProps {
 }
 
 @Injectable()
-export class UserService {
+export class UserService extends ServiceBase {
   constructor(
     private readonly dataSource: DataSource,
     private readonly userRepository: UserRepository,
@@ -43,7 +43,9 @@ export class UserService {
     private readonly logger: CustomLogger,
     @Inject(authConfig.KEY)
     private readonly jwtConfig: ConfigType<typeof authConfig>,
-  ) {}
+  ) {
+    super();
+  }
 
   async signUp({
     user,
@@ -85,7 +87,7 @@ export class UserService {
     }
 
     const accessToken = await this.jwtService.signAsync(
-      { sub: savedUserPassword.user.id },
+      { sub: savedUserPassword.userId },
       {
         secret: this.jwtConfig.jwtSecret,
         expiresIn: this.jwtConfig.jwtExpiresIn,
@@ -139,9 +141,7 @@ export class UserService {
       if (error.code === 'ER_DUP_ENTRY') {
         throw new ConflictException('이미 가입된 회원입니다.', error);
       } else {
-        throw new BadRequestException(
-          '회원가입 요청에 실패했습니다. 정보를 올바르게 다시 요청해주세요.',
-        );
+        this.processBasicTransactionException('회원가입', error);
       }
     } finally {
       await queryRunner.release();
