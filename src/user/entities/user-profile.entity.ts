@@ -7,9 +7,13 @@ import { User } from './user.entity';
 
 @Entity({ name: 'user_profiles' })
 export class UserProfile extends EntityBase {
+  @Column({ name: 'user_id', type: 'uuid', nullable: false })
+  userId: string;
+
   @OneToOne(() => User, (user) => user.id, {
     cascade: ['soft-remove', 'remove'],
     onDelete: 'CASCADE',
+    nullable: false,
   })
   @JoinColumn({
     name: 'user_id',

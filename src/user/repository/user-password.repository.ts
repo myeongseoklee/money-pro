@@ -13,7 +13,6 @@ export class UserPasswordRepository {
   async findUserBy(userPassword: UserPassword): Promise<UserPassword> {
     return await this.repository.findOne({
       where: { user: { email: userPassword.user.email } },
-      relations: { user: true },
     });
   }
 }

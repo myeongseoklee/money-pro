@@ -25,7 +25,6 @@ export class SignUpDto {
     required: true,
     example: 'money-pro1@money-pro.com',
   })
-  @Expose()
   @IsNotEmpty()
   @IsEmail({
     host_whitelist: [

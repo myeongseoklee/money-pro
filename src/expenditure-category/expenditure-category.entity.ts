@@ -1,4 +1,13 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  AfterLoad,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
+
+export const PARENT_CODE_NULL = '';
 
 @Entity({ name: 'expenditure_category' })
 export class ExpenditureCategory {
@@ -7,6 +16,9 @@ export class ExpenditureCategory {
 
   @Column({ name: 'name', type: 'varchar', length: 10, nullable: false })
   name: string;
+
+  @Column({ name: 'parent_code', type: 'varchar', length: 6, nullable: true })
+  parentCode: string;
 
   @ManyToOne(
     () => ExpenditureCategory,
@@ -26,4 +38,9 @@ export class ExpenditureCategory {
 
   @Column({ name: 'sort_order', type: 'tinyint', nullable: false })
   sortOrder: number;
+
+  @AfterLoad()
+  parseNullEmptyString(): void {
+    !this.parentCode && (this.parentCode = PARENT_CODE_NULL);
+  }
 }

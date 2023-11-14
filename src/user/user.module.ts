@@ -11,8 +11,6 @@ import { UserProfileRepository } from './repository/user-profile.repository';
 import { UserPasswordRepository } from './repository/user-password.repository';
 import { AuthGuard } from './guard/auth.guard';
 
-console.log('process.env.JWT_SECRET: ', process.env);
-
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, UserPassword, UserProfile]),

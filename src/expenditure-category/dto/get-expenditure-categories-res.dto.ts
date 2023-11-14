@@ -1,5 +1,8 @@
 import { Exclude, Expose } from 'class-transformer';
-import { ExpenditureCategory } from '../expenditure-category.entity';
+import {
+  ExpenditureCategory,
+  PARENT_CODE_NULL,
+} from '../expenditure-category.entity';
 
 interface IExpenditureCategory {
   code: string;
@@ -29,20 +32,12 @@ export class GetExpenditureCategoriesResDto {
   selfJoin(
     expenditureCategories: ExpenditureCategory[],
   ): SelfJoinedExpenditureCategory[] {
-    const categories = expenditureCategories.map((category) => ({
-      code: category.code,
-      name: category.name,
-      sortOrder: category.sortOrder,
-      parentCode:
-        category.parentExpenditureCategory === null
-          ? ''
-          : (category.parentExpenditureCategory as unknown as string),
-    }));
+    const parents = expenditureCategories.filter(
+      (category) => category.parentCode === PARENT_CODE_NULL,
+    );
 
-    const parents = categories.filter((category) => category.parentCode === '');
-
-    const children = categories.filter(
-      (category) => category.parentCode !== '',
+    const children = expenditureCategories.filter(
+      (category) => category.parentCode !== PARENT_CODE_NULL,
     );
 
     const selfJoinedCategories = parents.map((parent) => {
